@@ -30,36 +30,58 @@ class APN {
   }
 
   sendAPN(regIds, data) {
-    const message = new apn.Notification({
-      retryLimit: data.retries || -1,
-      expiry: extractExpiry(data),
-      priority: data.priority === 'normal' ? 5 : 10,
-      encoding: data.encoding,
-      payload: data.custom || {},
-      badge: data.badge,
-      sound: data.sound,
-      alert: data.alert || {
-        title: data.title,
-        body: data.body,
-        'title-loc-key': data.titleLocKey,
-        'title-loc-args': data.titleLocArgs,
-        'loc-key': data.locKey,
-        // bodyLocArgs is kept for backward compatibility
-        'loc-args': data.locArgs || data.bodyLocArgs,
-        'launch-image': data.launchImage,
-        action: data.action,
-      },
-      topic: data.topic,
-      category: data.category || data.clickAction,
-      contentAvailable: data.contentAvailable,
-      mdm: data.mdm,
-      urlArgs: data.urlArgs,
-      truncateAtWordEnd: data.truncateAtWordEnd,
-      collapseId: data.collapseKey,
-      mutableContent: data.mutableContent || 0,
-      threadId: data.threadId,
-      pushType: data.pushType,
-    });
+    
+    if (data.silent){
+      var message = new apn.Notification({
+        retryLimit: data.retries || -1,
+        expiry: extractExpiry(data),
+        priority: data.priority === 'normal' ? 5 : 10,
+        encoding: data.encoding,
+        payload: data.custom || {},
+        topic: data.topic,
+        category: data.category || data.clickAction,
+        contentAvailable: data.contentAvailable,
+        mdm: data.mdm,
+        urlArgs: data.urlArgs,
+        truncateAtWordEnd: data.truncateAtWordEnd,
+        collapseId: data.collapseKey,
+        mutableContent: data.mutableContent || 0,
+        threadId: data.threadId,
+        pushType: data.pushType,
+      });
+    }
+    else{
+      var message = new apn.Notification({
+        retryLimit: data.retries || -1,
+        expiry: extractExpiry(data),
+        priority: data.priority === 'normal' ? 5 : 10,
+        encoding: data.encoding,
+        payload: data.custom || {},
+        badge: data.badge,
+        sound: data.sound,
+        alert: data.alert || {
+          title: data.title,
+          body: data.body,
+          'title-loc-key': data.titleLocKey,
+          'title-loc-args': data.titleLocArgs,
+          'loc-key': data.locKey,
+          // bodyLocArgs is kept for backward compatibility
+          'loc-args': data.locArgs || data.bodyLocArgs,
+          'launch-image': data.launchImage,
+          action: data.action,
+        },
+        topic: data.topic,
+        category: data.category || data.clickAction,
+        contentAvailable: data.contentAvailable,
+        mdm: data.mdm,
+        urlArgs: data.urlArgs,
+        truncateAtWordEnd: data.truncateAtWordEnd,
+        collapseId: data.collapseKey,
+        mutableContent: data.mutableContent || 0,
+        threadId: data.threadId,
+        pushType: data.pushType,
+      });
+    }
 
     if (!this.connection) {
       return Promise.reject(
